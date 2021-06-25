@@ -12,6 +12,25 @@ import { AssertAssignable } from "../util";
  * We'll represent items from these slips as a PaperLineItem, 
  * which is simply a collection of properties. 
  */
+
+ export type Protein =
+ | "chicken" // 🐓
+ | "jackfruit" // 🍈
+
+ // Pricey Proteins
+ | "carnitas" // 🐖
+ | "portabelloCap"; // 🍄
+
+export type EntreeType =
+ | "taco" // 🌮
+ | "sandwich"; // 🍞
+
+export type Topping =
+ | "cheese" // 🧀
+ | "lettuce" // 🥗
+ | "tomato"; // 🍅
+
+
 export type PaperLineItem = {
   type: EntreeType;
   protein: Protein;
@@ -37,7 +56,29 @@ export type PaperLineItem = {
  * valid orders! Use the discriminated union technique and 
  * other tools you've learned to do this.
  * ======================================================*/
-export type LineItem = {};
+
+
+ type Taco = {
+  type: "taco"; 
+  protein: Protein; 
+  salsa?: boolean;
+  awesomeSauce: boolean;
+  extraTaco?: boolean; 
+
+
+}; 
+
+type Sandwich = {
+  type: "sandwich"
+  protein: Protein;
+  salsa?: boolean;
+  toppings?: Topping[];
+  awesomeSauce: boolean;            
+}
+
+
+export type LineItem = Taco  | Sandwich;
+
 
 
 export interface Order {
@@ -52,9 +93,62 @@ export interface Order {
  * * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of
  * * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
  * ======================================================*/
-export function priceOrder(order: Order): number {
-  return 1;
+
+function Taco_Price(taco: Taco): number {
+  let  taco_price : number = 5;
+   if(taco.protein == "carnitas"){
+     taco_price = taco_price + 2;
+   }
+   if(taco.salsa){
+     taco_price = taco_price + 0.5;
+     if(taco.awesomeSauce){
+       taco_price = taco_price + 1;
+     }
+   }
+   if(taco.extraTaco){
+     taco_price = taco_price + 3;
+     if(taco.protein == "carnitas"){
+       taco_price = (taco_price-3) + 4;
+     }
+   }
+   return taco_price;
+ }
+
+function Sandwich_Price(sandwich: Sandwich): number {
+  let  sandwich_price : number = 4;
+  if(sandwich.awesomeSauce){
+  sandwich_price = sandwich_price + 1;
+  }
+  if(sandwich.protein == "portabelloCap"){
+  sandwich_price = sandwich_price + 2;
+  }
+  if(sandwich.toppings?.includes('cheese') && sandwich.toppings?.includes('tomato') && sandwich.toppings?.includes('lettuce')){
+  sandwich_price = sandwich_price + (0.5*2);
+  }
+  return sandwich_price;
 }
+
+function priceFromItem(lineitem: LineItem) {
+  let price : number;
+  switch (lineitem.type) {
+    case "taco":
+      price = Taco_Price(lineitem);
+      break;
+    case "sandwich":
+      price = Sandwich_Price(lineitem);
+      break;
+  }
+  return price
+}
+
+export function priceOrder(order: Order): number {
+  let priceO = 0;
+  for(let i = 0; i<order.lineItems.length; i++){
+    priceO += priceFromItem(order.lineItems[i]);
+  }
+  return priceO; 
+} 
+
 
 /* Monster Foodies Food Truck Menu
 Taco....................$5
@@ -76,22 +170,6 @@ Sandwich................$4
 Add AwesomeSauce to anything for $1!
 */
 
-export type Protein =
-  | "chicken" // 🐓
-  | "jackfruit" // 🍈
-
-  // Pricey Proteins
-  | "carnitas" // 🐖
-  | "portabelloCap"; // 🍄
-
-export type EntreeType =
-  | "taco" // 🌮
-  | "sandwich"; // 🍞
-
-export type Topping =
-  | "cheese" // 🧀
-  | "lettuce" // 🥗
-  | "tomato"; // 🍅
 
 
 

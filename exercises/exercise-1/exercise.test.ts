@@ -352,37 +352,37 @@ test("the 'any' type", () => {
 *  VS Code shortcut: mac: cmd-/    linux/windows: ctrl-/
 */
 // /**************************************************************************/
-// test("Writing our own types", () => {
-//   /*
-//    * ======================================================
-//    * TODO: Update the definition of FixThisType to allow 
-//    * strings only.
-//    * ======================================================*/
-//   type FixThisType = any;
-//   let jaime: FixThisType = "Jaime"
-//   let meredith: FixThisType = "Meredith"
-//   // typings:expect-error
-//   let no: FixThisType = false;
-// })
+ test("Writing our own types", () => {
+   /*
+    * ======================================================
+    * TODO: Update the definition of FixThisType to allow 
+    * strings only.
+    * ======================================================*/
+   type FixThisType = string;
+   let jaime: FixThisType = "Jaime"
+   let meredith: FixThisType = "Meredith"
+   // typings:expect-error
+   let no: FixThisType = false;
+})
 // /**************************************************************************/
 
 // /**************************************************************************/
-// test("Writing some function types", ()=>{
+ test("Writing some function types", ()=>{
 //   /*
 //    * ======================================================
 //    * TODO: Update FixThisType to allow a function that takes
 //    * a string and returns a string.
 //    * ======================================================*/
-//   type FixThisType = any;
-//   let sayHello: FixThisType = (name: string) => { return `Hello, ${name}.`}
-//   let sayGoodbye: FixThisType = (name: string) => { return `Goodbye, ${name}.`}
-//   // typings:expect-error
-//   let isFido: FixThisType = (name: string) => { return name === "Fido"};
-// })
+ type FixThisType = (s : string) => string;
+   let sayHello: FixThisType = (name: string) => { return `Hello, ${name}.`}
+   let sayGoodbye: FixThisType = (name: string) => { return `Goodbye, ${name}.`}
+   // typings:expect-error
+   let isFido: FixThisType = (name: string) => { return name === "Fido"};
+})
 // /**************************************************************************/
 
 // /**************************************************************************/
-// test("Writing a function with help from TS", () => {
+ test("Writing a function with help from TS", () => {
 //   /*
 //    * ======================================================
 //    * TODO: Implement classifyFruit to return the following when
@@ -393,39 +393,53 @@ test("the 'any' type", () => {
 //    *     other    => "I don't know that fruit"
 //    * Take note of when the type error goes away!
 //    * ======================================================*/
-//   function classifyFruit(color: string): string {}
-// })
+  function classifyFruit(color: string): string {
+    switch (color) {
+      case "red":
+         return "apple";
+      case "yellow":
+         return "banana";
+      case "orange":
+         return "orane";
+      default:
+         return "I don\`t know that fruit";
+  }
+  }
+ })
 
 // /**************************************************************************/
-// test("Writing some object types", () => {
+ test("Writing some object types", () => {
 //   /*
 //    * ======================================================
 //    * TODO: Update FixThisOneToo to allow objects with a kind
 //    * and a disposition.
 //    * ======================================================*/
-//   type FixThisType = any;
-//   let nellie: FixThisType = { kind: "dog", disposition: "good" }
-//   let roxy: FixThisType = { kind: "dog", disposition: "aloof" }
-//   // typings:expect-error
-//   let friday: FixThisType = { kind: "cat", fluffy: "very" }
-//   // typings:expect-error
-//   let cauchy: FixThisType = { kind: "cat", fluffy: "not really" }
-// })
+   type FixThisType =  {
+                    kind: string;
+                    disposition: string;
+                  };
+   let nellie: FixThisType = { kind: "dog", disposition: "good" }
+   let roxy: FixThisType = { kind: "dog", disposition: "aloof" }
+   // typings:expect-error
+   let friday: FixThisType = { kind: "cat", fluffy: "very" }
+   // typings:expect-error
+   let cauchy: FixThisType = { kind: "cat", fluffy: "not really" }
+ })
 // /**************************************************************************/
 
 // /**************************************************************************/
-// test("Structural compatibility", () => {
+ test("Structural compatibility", () => {
 //   /*
 //    * ======================================================
 //    * TODO: Define a Pet and a Cat type such that Cat is 
 //    * assignable to Pet, but Pet isn't assignable to 
 //    * Cat. Use whatever properties you like!
 //    * ======================================================*/
-//   type Pet = {};
-//   type Cat = {};
+   type Pet = { name: string};
+   type Cat = { name: string, age: number};
 
-//   type _t1 = AssertAssignable<Pet, Cat>;
-//   // typings:expect-error
-//   type _t2 = AssertAssignable<Cat, Pet>;
-// })
+   type _t1 = AssertAssignable<Pet, Cat>;
+// typings:expect-error
+   type _t2 = AssertAssignable<Cat, Pet>;
+ })
 // /**************************************************************************/

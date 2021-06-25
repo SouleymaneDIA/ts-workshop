@@ -515,7 +515,7 @@ test("combining unions & intersections", () => {
   ).toEqual("This is the Brockett family dog, Stella the standard Pitbull.");
 
   /* Extra credit: Find a different way to describe your Pet type. */
-  type AltPet = any;
+  type AltPet = (Cat | Dog) & PetInfo;
 
   type _t1 = AssertAssignable<AltPet, Pet>;
   type _t2 = AssertAssignable<Pet, AltPet>;
